@@ -1,1 +1,200 @@
 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Devis Carrelage Express</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f1f4f7;font-family:Arial,sans-serif;color:#202a35}
+header{background:#183b56;color:white;padding:24px 16px;text-align:center}
+header h1{margin:0;font-size:25px}
+header p{margin:8px 0 0;color:#d5e5ef}
+main{max-width:700px;margin:18px auto;padding:0 12px}
+.card{background:white;padding:19px;margin-bottom:15px;border-radius:13px;box-shadow:0 2px 9px #0000000c}
+h2{font-size:18px;margin:0 0 17px;color:#183b56}
+label{display:block;font-weight:600;font-size:14px;margin:13px 0 6px}
+input,select{width:100%;padding:13px;border:1px solid #ccd4dc;border-radius:8px;font-size:16px;background:white}
+.check{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #edf0f2;font-weight:500}
+.check input{width:21px;height:21px;flex-shrink:0}
+.check label{margin:0;font-weight:500;flex:1}
+.hidden{display:none}
+.small{font-size:13px;color:#667785;font-weight:400}
+.extra{margin:8px 0 12px 30px}
+button{border:0;border-radius:10px;padding:16px;font-size:17px;font-weight:bold;cursor:pointer;width:100%}
+.generate{background:#16734a;color:white;margin:8px 0 20px}
+.generate:active{background:#105b39}
+.price{background:#edf4f8;padding:13px;border-radius:8px;margin-top:12px}
+#total{font-size:27px;font-weight:bold;color:#16734a}
+footer{text-align:center;color:#71808c;font-size:12px;padding:10px}
+</style>
+</head>
+<body>
+<header>
+<h1>Devis Carrelage Express</h1>
+<p>Votre devis carrelage en quelques clics</p>
+</header>
+<main>
+<section class="card">
+<h2>1. Informations du client</h2>
+<label>Nom du client</label>
+<input id="client" placeholder="Nom et prénom">
+<label>Adresse du chantier</label>
+<input id="adresse" placeholder="Adresse complète">
+<label>Surface totale (m²)</label>
+<input id="surface" type="number" min="0" step="0.01" placeholder="Ex : 35">
+</section>
+
+<section class="card">
+<h2>2. Type de chantier</h2>
+<div class="check"><input type="radio" name="type" id="sdb" value="sdb"><label for="sdb">Salle de bain complète</label></div>
+<div class="check"><input type="radio" name="type" id="autre" value="autre" checked><label for="autre">Autre chantier (sol, cuisine, terrasse...)</label></div>
+<label>Format du carrelage</label>
+<select id="format">
+<option value="35">Petit format 30x30, 45x45 — 35 €/m²</option>
+<option value="40" selected>Standard 60x60 — 40 €/m²</option>
+<option value="55">Grand format 60x120, 80x80 — 55 €/m²</option>
+<option value="180">Très grand format 120x120 et + — 180 €/m²</option>
+</select>
+</section>
+
+<section class="card">
+<h2>3. Prestations</h2>
+<div class="check" id="prepRow"><input type="checkbox" id="prep"><label for="prep">Nettoyage et préparation du support</label></div>
+<div class="check" id="primerRow"><input type="checkbox" id="primer"><label for="primer">Primaire d'accrochage</label></div>
+<div class="check" id="poseRow"><input type="checkbox" id="pose" checked><label for="pose">Pose de carrelage</label></div>
+<div class="check"><input type="checkbox" id="dilat"><label for="dilat">Joints de dilatation</label></div>
+<div class="extra hidden" id="dilatExtra">
+<label>Nombre de mètres linéaires</label><input id="dilatMl" type="number" min="0" step="0.1" placeholder="0">
+<label>Prix au ml (€)</label><input id="dilatPrix" type="number" min="0" step="0.01" placeholder="À définir">
+</div>
+<div class="check"><input type="checkbox" id="plinthe"><label for="plinthe">Pose de plinthe (9 €/ml)</label></div>
+<div class="extra hidden" id="plintheExtra">
+<label>Nombre de mètres linéaires</label><input id="plintheMl" type="number" min="0" step="0.1" placeholder="0">
+</div>
+<div class="check" id="faienceRow"><input type="checkbox" id="faience"><label for="faience">Pose de faïence / crédence</label></div>
+<div class="extra hidden" id="faienceExtra">
+<label>Surface de faïence (m²)</label><input id="faienceM2" type="number" min="0" step="0.1" placeholder="0">
+</div>
+<div class="check"><input type="checkbox" id="escalier"><label for="escalier">Pose d'escalier</label></div>
+<div class="extra hidden" id="escalierExtra">
+<label>Nombre de marches</label><input id="marches" type="number" min="0" step="1" placeholder="0">
+<label>Prix par marche (€)</label><input id="marchePrix" type="number" min="0" step="0.01" placeholder="À définir">
+</div>
+<div class="check" id="etancheRow"><input type="checkbox" id="etanche"><label for="etanche">Étanchéité intérieur de douche</label></div>
+<div class="check" id="siliconeRow"><input type="checkbox" id="silicone"><label for="silicone">Silicone angles douche</label></div>
+<div class="extra hidden" id="siliconeExtra">
+<label>Nombre de mètres linéaires</label><input id="siliconeMl" type="number" min="0" step="0.1" placeholder="0">
+</div>
+<div class="check"><input type="checkbox" id="nettoyage"><label for="nettoyage">Nettoyage de fin de chantier (350 €)</label></div>
+</section>
+
+<section class="card">
+<h2>4. Aperçu du devis</h2>
+<div id="details" class="small">Renseignez les prestations pour calculer le devis.</div>
+<div class="price">
+<div>Total HT</div>
+<div id="total">0,00 €</div>
+</div>
+</section>
+<button class="generate" onclick="genererPDF()">Générer mon devis PDF</button>
+<footer>Devis Carrelage Express</footer>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const euros=n=>n.toLocaleString('fr-FR',{minimumFractionDigits:2,maximumFractionDigits:2})+' €';
+const val=id=>Math.max(0,Number($(id).value)||0);
+const checked=id=>$(id).checked;
+const type=()=>checked('sdb')?'sdb':'autre';
+const surface=()=>val('surface');
+
+function affiche(id,show){$(id).classList.toggle('hidden',!show)}
+function mode(){
+ const sdb=type()==='sdb' && surface()<=25 && surface()>0;
+ const inclut=sdb;
+ ['prepRow','primerRow','poseRow','faienceRow','etancheRow','siliconeRow'].forEach(id=>affiche(id,!inclut));
+ if(inclut){
+ ['prep','primer','pose','faience','etanche','silicone'].forEach(id=>$(id).checked=false);
+ }
+ affiche('dilatExtra',checked('dilat'));
+ affiche('plintheExtra',checked('plinthe'));
+ affiche('faienceExtra',checked('faience')&&!inclut);
+ affiche('escalierExtra',checked('escalier'));
+ affiche('siliconeExtra',checked('silicone')&&!inclut);
+ affiche('faienceRow',!inclut);
+ calc();
+}
+function calcul(){
+ let lignes=[],s=surface(),sdb=type()==='sdb'&&s>0&&s<=25;
+ const add=(nom,q,unite,pu)=>{if(q>0&&pu>=0)lignes.push({nom,q,unite,pu,total:q*pu})};
+ if(sdb){
+ let forfait=s<6?1800:s<=10?2000:2500;
+ add('Forfait Salle de Bain Complète (tout inclus)',1,'forfait',forfait);
+ }else{
+ if(checked('prep')||checked('primer')){
+ let nom=checked('prep')&&checked('primer')?'Préparation + Primaire':checked('prep')?'Préparation du support':'Primaire d’accrochage';
+ add(nom,s>20?s:1,s>20?'m²':'forfait',s>20?8:350);
+ }
+ if(checked('pose'))add('Pose de carrelage',s,'m²',val('format'));
+ if(checked('etanche'))add('Étanchéité intérieur de douche',1,'forfait',350);
+ if(checked('faience'))add('Pose de faïence / crédence',val('faienceM2'),'m²',val('format'));
+ if(checked('silicone'))add('Silicone angles douche',val('siliconeMl'),'ml',0);
+ }
+ if(checked('plinthe'))add('Pose de plinthe',val('plintheMl'),'ml',9);
+ if(checked('dilat'))add('Joints de dilatation',val('dilatMl'),'ml',val('dilatPrix'));
+ if(checked('escalier'))add('Pose d’escalier',val('marches'),'marche',val('marchePrix'));
+ if(checked('nettoyage'))add('Nettoyage de fin de chantier',1,'forfait',350);
+ return lignes;
+}
+function calc(){
+ modeAffichage();
+}
+function modeAffichage(){
+ let lignes=calcul(),total=lignes.reduce((a,l)=>a+l.total,0);
+ $('details').innerHTML=lignes.length?lignes.map(l=>`${l.nom} — ${l.q} ${l.unite} × ${euros(l.pu)} = ${euros(l.total)}`).join('<br>'):'Aucune prestation sélectionnée.';
+ $('total').textContent=euros(total);
+}
+function genererPDF(){
+ let s=surface();
+ if(!$('client').value.trim()||!$('adresse').value.trim()||s<=0){
+ alert('Merci de renseigner le client, l’adresse et une surface valide.');return;
+ }
+ let lignes=calcul();
+ if(!lignes.length){alert('Sélectionnez au moins une prestation.');return;}
+ if(checked('dilat')&&val('dilatMl')>0&&!val('dilatPrix')){alert('Indiquez le prix au ml des joints de dilatation.');return;}
+ if(checked('escalier')&&val('marches')>0&&!val('marchePrix')){alert('Indiquez le prix par marche.');return;}
+ if(checked('silicone')&&val('siliconeMl')>0){alert('Le tarif du silicone n’est pas encore défini. Ajoutez-le avant de générer le devis.');return;}
+ let {jsPDF}=window.jspdf;
+ let pdf=new jsPDF();
+ let y=22;
+ pdf.setFontSize(21);pdf.setTextColor(24,59,86);
+ pdf.text('DEVIS CARRELAGE',15,y);
+ y+=12;pdf.setFontSize(11);pdf.setTextColor(40,40,40);
+ pdf.text('Devis Carrelage Express',15,y);y+=12;
+ pdf.text('Client : '+$('client').value,15,y);y+=7;
+ pdf.text('Chantier : '+$('adresse').value,15,y);y+=7;
+ pdf.text('Surface : '+s+' m²',15,y);y+=12;
+ pdf.setFont(undefined,'bold');
+ pdf.text('PRESTATIONS',15,y);y+=9;
+ pdf.setFont(undefined,'normal');
+ lignes.forEach(l=>{
+  if(y>265){pdf.addPage();y=20;}
+  let desc=l.nom+' | '+l.q+' '+l.unite+' x '+euros(l.pu);
+  pdf.text(desc,15,y);pdf.text(euros(l.total),195,y,{align:'right'});y+=9;
+ });
+ y+=8;pdf.setDrawColor(24,59,86);pdf.line(15,y,195,y);y+=12;
+ pdf.setFontSize(16);pdf.setFont(undefined,'bold');
+ pdf.text('TOTAL HT : '+euros(lignes.reduce((a,l)=>a+l.total,0)),15,y);
+ pdf.save('Devis-Carrelage.pdf');
+}
+document.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',()=>{
+ if(el.type==='radio'||el.id==='surface')mode();else calc();
+}));
+mode();
+</script>
+</body>
+</html>
+
+
